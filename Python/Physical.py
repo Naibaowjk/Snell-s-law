@@ -72,13 +72,63 @@ class Physical:
                 eq2 = Eq(np.dot(v_ts, v_ts), np.dot(v_i, v_i))
                 eq3 = Eq(np.dot(v_ts, -n) /
                          sqrt(np.dot(v_ts, v_ts)*np.dot(-n, -n)), cos2)
-                eq4 = Eq(np.dot(v_ts, v_i) /
-                         sqrt(np.dot(np.dot(v_ts, v_i), np.dot(v_ts, v_i))), 1)
+                # eq4 = Eq(np.dot(v_ts, v_i) /
+                #          sqrt(np.dot(np.dot(v_ts, v_i), np.dot(v_ts, v_i))), 1)
                 # solve equtions
-                sol = solve([eq1, eq2, eq3, eq4], v_ts)
-
+                sol = solve([eq1, eq2, eq3], v_ts)
+                print(type(sol))
                 # change type of sol
-                v_t = next(iter(sol))
+                v_ts1 = np.array([sol[0][0], sol[0][1], sol[0][2]])
+                v_ts2 = np.array([sol[1][0], sol[1][1], sol[1][2]])
+                # select on as solve
+                if np.dot(v_i, v_ts1) > np.dot(v_i, v_ts2):
+                    v_t = v_ts1
+                else:
+                    v_t = v_ts2
+        light_t.set_v(np.array([v_t[0], v_t[1], v_t[2]]))
+        return light_t
+
+    def transmisson2(self, surface=Surface(), light_in=Light(), n1=1, n2=1.3330):
+        # teacher's way
+        # in parameter will get error, when set n1, n2 to n_air and n_water, so directly use value
+        # return the transmisson light
+        # get meeting point and time
+
+        mp_t0 = self.get_mp_and_t0(surface, light_in)
+
+        # set the source and time
+        light_t = Light()
+        light_t.set_s(np.array([mp_t0[0], mp_t0[1], mp_t0[2]]))
+        light_t.set_t(np.arange(0, mp_t0[3]+mp_t0[3]/10, mp_t0[3]/10))
+
+        # get n vector , v_i
+        n = surface.get_n()
+        v_i = light_in.get_v()
+
+        # sin（theta1),sin(theta2),cos(theta1),cos(theta2)
+        cos1 = np.dot(-v_i, n)/sqrt(np.dot(v_i, v_i)*np.dot(n, n))
+        sin1 = sqrt(1-cos1**2)
+        sin2 = n1*sin1/n2
+        cos2 = sqrt(1-sin2**2)
+
+        # calculate brust angle
+        sin2_b = 1
+        sin1_b = n2*sin2_b/n1
+
+        # check special case, n vector is equal with -v_i, directly trans
+        if (np.cross(n, -v_i) == [0, 0, 0]).all():
+            v_t = v_i
+        else:
+            # check brust case
+            if (n1 >= n2) & (sin1 >= sin1_b):
+                v_t = np.array([0, 0, 0])
+
+            # normal case
+            else:
+                v_tx = np.cross(np.cross(n, v_i), n)*n1/n2
+                v_ty = -sqrt(np.dot(v_i, v_i)-np.dot(v_tx, v_tx))*n
+
+                v_t = v_tx+v_ty
         light_t.set_v(np.array([v_t[0], v_t[1], v_t[2]]))
         return light_t
 
@@ -105,7 +155,7 @@ class Physical:
         # set the source and time
         light_r = Light()
         light_r.set_s(np.array([mp_t0[0], mp_t0[1], mp_t0[2]]))
-        light_r.set_t(np.arange(0, mp_t0[3]+mp_t0[3]/10,mp_t0[3]/10))
+        light_r.set_t(np.arange(0, mp_t0[3]+mp_t0[3]/10, mp_t0[3]/10))
 
         # get n vector , v_i
         n = surface.get_n()
@@ -127,11 +177,36 @@ class Physical:
         # change type of sol
         # sb python will return want ever it like...
         if type(sol) == dict:
-            x_r
             v_r = [sol[x_r], sol[y_r], sol[z_r]]
         else:
             v_r = next(iter(sol))
 
         light_r.set_v(np.array([v_r[0], v_r[1], v_r[2]]))
 
+        return light_r
+
+    def reflection2(self, surface=Surface(), light_in=Light()):
+        # second way to get reflection
+
+        # first to get meeting point
+        mp_t0 = self.get_mp_and_t0(surface, light_in)
+
+        # set the source and time
+        light_r = Light()
+        light_r.set_s(np.array([mp_t0[0], mp_t0[1], mp_t0[2]]))
+        light_r.set_t(np.arange(0, mp_t0[3]+mp_t0[3]/10, mp_t0[3]/10))
+
+        # get n vector , v_i
+        n = surface.get_n()
+        v_i = light_in.get_v()
+
+        # get v_i shadow on n vector
+        v_is = np.dot(-v_i, n)/sqrt(np.dot(n, n))
+        # get sin vector p
+        p = v_is+v_i
+        # get v_r
+        v_r = 2*p-v_i
+
+        # set light_r._v
+        light_r.set_v(v_r)
         return light_r
