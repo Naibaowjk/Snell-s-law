@@ -164,7 +164,7 @@ def test5():
     # run
     Physical().run_plot(list_surface, light_i, 1, 10)
 
-# ------------------------------------------case 3: brust case
+# ------------------------------------------case 3: total internal reflection TIR case
 
 
 def test6():
@@ -214,7 +214,6 @@ def test9():
 
 # ------------------------------------------case 7: almost directly
 
-
 def test10():
     surface1 = Surface(np.array([0, 0, 0]), np.array(
         [0, 0, 1]), Surface().get_n_air(), Surface().get_n_water())
@@ -225,7 +224,6 @@ def test10():
 
     Physical().run_plot(list_surface, light_i)
 # ------------------------------------------case 8: for fun
-
 
 def test11():
     surface1 = Surface(np.array([0, 0, 0]), np.array([1, 0, 0]))
@@ -238,7 +236,7 @@ def test11():
 
     Physical().run_plot(list_surface, light_i, 3, 6)
 
-
+# ------------------------------------------case 9: only reflction in Metal
 def test12():
     surface1 = Surface(np.array([0, 0, 0]), np.array(
         [-1, 0, 0]), Surface().get_n_metal(), Surface().get_n_water())
@@ -251,5 +249,3 @@ def test12():
     # run
     Physical().run_plot(list_surface, light_i, 5, 30)
 
-def test13(): pass
-test12()
