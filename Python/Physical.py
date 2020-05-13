@@ -27,6 +27,7 @@ class Physical:
         else:
             n2 = surface.get_n1()
             n1 = surface.get_n2()
+            n = -n
         # get meeting point and time
         mp_t0 = self.get_mp_and_t0(surface, light_in)
 
@@ -96,6 +97,7 @@ class Physical:
         else:
             n2 = surface.get_n1()
             n1 = surface.get_n2()
+            n = -n
 
         # get meeting point and time
         mp_t0 = self.get_mp_and_t0(surface, light_in)
@@ -104,7 +106,6 @@ class Physical:
         light_t = Light()
         light_t.set_s(np.array([mp_t0[0], mp_t0[1], mp_t0[2]]))
         light_t.set_t(np.arange(0, mp_t0[3]+mp_t0[3]/10, mp_t0[3]/10))
-
 
         # sin（theta1),sin(theta2),cos(theta1),cos(theta2)
         cos1 = np.dot(-v_i, n)/sqrt(np.dot(v_i, v_i)*np.dot(n, n))
@@ -142,9 +143,9 @@ class Physical:
         v_i = light.get_v()
         s = light.get_s()
         # for the case light and surface parallel, n*v' =0, and source is on surface, (s-p)*n'=0
-        # let the point and time be zero
+        # let the point and time be 100
         if np.dot(n, v_i) == 0:
-
+            t0 = 0
             mp_t0 = [0, 0, 0, 0]
         # source on surface
         else:
@@ -270,18 +271,19 @@ class Physical:
                             np.arange(0, mp_t0[3]+mp_t0[3]/10, mp_t0[3]/10))
                         # set the point in surface is meeting point to save the value to plot
                         list_surface_index = list_surface.index(surface_m)
-                        list_surface[list_surface_index].set_p(
-                            np.array([mp_t0[0], mp_t0[1], mp_t0[2]]))
+                        # mp = [mp_t0[0], mp_t0[1], mp_t0[2]]
+                        # list_surface[list_surface_index].set_p(np.array(mp))
+
                         # calcute trans and ref
-                        light_t_temp = self.transmisson(surface_m, light_temp)
+                        light_t_temp = self.transmisson2(surface_m, light_temp)
                         light_r_temp = self.reflection(surface_m, light_temp)
                         # add to tree
                         tree_light.add(light_t_temp)
                         tree_light.add(light_r_temp)
         return [tree_light, list_surface]
 
-    def run_plot(self, list_surface=[Surface()], light_in=Light(), i=1):
-        # [list]
+    def run_plot(self, list_surface=[Surface()], light_in=Light(), i=1, size=2):
+        # i is the times to t and r, size is the large of surface
         list_tree_surface = self.lightrun(list_surface, light_in, i)
         tree_light = list_tree_surface[0]
         list_surface = list_tree_surface[1]
@@ -294,9 +296,10 @@ class Physical:
         for light in list_light:
             light.plot(fig, ax)
         for surface in list_surface:
-            x_p=surface.get_p()[0]
-            y_p=surface.get_p()[1]
-            surface.plot(fig, ax, x=np.arange(-2+x_p, 2+x_p, 0.2), y=np.arange(-2+y_p, 2+y_p, 0.2))
+            x_p = surface.get_p()[0]
+            y_p = surface.get_p()[1]
+            surface.plot(fig, ax, x=np.arange(-size+x_p, size+x_p,
+                                              size/5), y=np.arange(-size+y_p, size+y_p, size/5))
 
         plt.show()
 

@@ -13,7 +13,7 @@ class Light:
     # stcrution method, python only have one?
     # 4 name, source, vector ,time, and light
 
-    def __init__(self, s=np.array([0, 0, 0]), v=np.array([0, 0, 1]), t=np.arange(10)/10):
+    def __init__(self, s=np.array([0, 0, 0]), v=np.array([0, 0, 1]), t=np.arange(0,10,1)):
 
         self._s = s
         self._v = v

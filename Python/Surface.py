@@ -19,6 +19,7 @@ class Surface():
         self._n_water = 1.3330
         self._n_ice = 1.306
         self._n_air = 1
+        self._n_metal = 0.05
         self._n1 = n1
         self._n2 = n2
 
@@ -31,7 +32,10 @@ class Surface():
 
     def get_n_air(self):
         return self._n_air
-   
+
+    def get_n_metal(self):
+        return self._n_metal
+
     # encapsulation p,n
     def get_p(self):
         return self._p
@@ -63,9 +67,21 @@ class Surface():
 
     def plot(self, fig=plt.Figure(),
              ax=plt.axes(projection='3d'), x=np.arange(-2, 2, 0.2), y=np.arange(-2, 2, 0.2) ):
-        X, Y = np.meshgrid(x, y)
-        Z = ((X-self._p[0])*self._n[0]+(Y-self._p[1]) *
-             self._n[1]-self._p[2]*self._n[2])/-self._n[2]
+        if self._n[2]!=0:
+            X, Y = np.meshgrid(x, y)
+            Z = ((X-self._p[0])*self._n[0]+(Y-self._p[1]) *
+                self._n[1]-self._p[2]*self._n[2])/-self._n[2]
+        else :
+            if self._n[1]!=0:
+                z=x
+                X,Z=np.meshgrid(x,z)
+                Y= ((X-self._p[0])*self._n[0]+(Z-self._p[2]) *
+                    self._n[2]-self._p[1]*self._n[1])/-self._n[1]
+            else :
+                z=y
+                Y,Z=np.meshgrid(y,z)
+                X=((Z-self._p[2])*self._n[2]+(Y-self._p[1]) *
+                self._n[1]-self._p[0]*self._n[0])/-self._n[0]
         ax.plot_surface(X, Y, Z)
     
     
