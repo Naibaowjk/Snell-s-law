@@ -9,6 +9,13 @@ class Light:
     ''' Light class is object of Light, it has a lightsource -> self.s, and a vector -> self.v 
         in this class, it has a time to contral the length of light, for easier, the lightspeed c 
         has been setted 10 , time goes 0.1, axis goes 1
+
+        Attributes: all of them is private, pls use get() and set()
+            
+            _s: source, default is np.array([0, 0, 0])
+            _v: vector, default is np.array([0, 0, 1])
+            _t: time linspace, default is np.arange(0,10,1)
+            _light: s'+t.*v', will automatically calcuted, when _s,_v,_t are givend
     '''
     # stcrution method, python only have one?
     # 4 name, source, vector ,time, and light
@@ -20,6 +27,7 @@ class Light:
         self._t = t
         self._light = Math.vector_trans(s)+Math.dot(t, v)
 
+    # encapsulation s,v,t, light
     def get_s(self):
         return self._s
 
@@ -49,6 +57,10 @@ class Light:
 
     # we need get the light at a specfic time to solve formula, so we need to set t0 als Symbol
     def get_light_in_t0(self, t0: Symbol):
+        """ it will return the light point at t0, better t0 is Symbol, 
+            args: t0:Symbol
+            return: [x,y,z] as a list
+        """
         # for solve , we need return in a array with three axis alone...
         x = self._s[0]+t0*self._v[0]
         y = self._s[1]+t0*self._v[1]
@@ -57,5 +69,11 @@ class Light:
 
     # plot the light in 3D
     def plot(self, fig=plt.figure(), ax=plt.axes(projection='3d'), color='b'):
+        """
+            use this method to draw this light on a figure.
+            args: 
+                fig: default plt.Figure()
+                ax : default plt.axes(projection='3d')
+        """
         # ax = fig.gca(projection='3d')
         ax.plot(self._light[0], self._light[1], self._light[2], color)

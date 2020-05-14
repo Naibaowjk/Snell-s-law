@@ -11,6 +11,37 @@ then build some equtions for transmisson and reflection, solve the vector of tra
 
 finally plot them all in a figure
 
+![Math Module View1](/Image/Theory1.jpg)
+
+Class: Light, Surface will have this attributes, and Math will do something to get right calculating.
+
+This picture will show the Algorithm of Snell's Law. the Core methond is lightrun()
+![Math Module View2](/Image/Theory2.jpg)
+
+as alternative, for transmisson and reflection, we have transmisson2() and reflection2(),transmisson2 works good, reflection2 maybe have bugs, not very reliable .
+
+at last, we will show you some detail of this Algorithm.
+
+- Dont't have metting point :
+
+we get 2 eqautions to solve, if no meeting point, we consider it on first and set t0 = 0, it also has a situation that t0<0 , it means also not hit. so can only judge if t0>0.
+
+for the really hit surface, t0 must be the minimal of list_t0.
+
+- Special case: 
+
+for case2 , case3, we use some if command to get transmisson light
+
+- How to judge the reflection index.
+
+we can calculate surface.get_n()*light.get_v() , if >0 , then from n1 to n2, else from n2 t0 n1.
+
+- What's tree looks like in few times refecltion
+
+![Math Module View3](/Image/Theory3.jpg)
+
+
+
 ## **for Matlab**
 it has been tested working suitable for Matlab2019b, for 2020a or later, it may have errors in solve(), should change the eqn with vertor type into 3 different linear eqn.
 

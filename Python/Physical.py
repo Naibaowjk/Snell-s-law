@@ -11,6 +11,8 @@ class Physical:
     ''' this class handle the transmisson and reflection of light, base on matlab code
         it have 2 method one is transmisson -> transmisson() 
         the other one is reflection -> reflection()  we need also to calcute the metting point of light and surface, method -> get_mp_and_t0()  will handle it
+
+        more information pls see Readme on github. https://github.com/Naibaowjk/Snell-s-law
     '''
 
     def transmisson(self, surface=Surface(), light_in=Light()):

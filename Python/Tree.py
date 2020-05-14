@@ -3,7 +3,7 @@
 # 版权声明：本文为CSDN博主「九茶」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
 
 class Node(object):
-    """节点类"""
+    """Node Class"""
 
     def __init__(self, elem=-1, lchild=None, rchild=None):
         self.elem = elem
@@ -12,7 +12,7 @@ class Node(object):
 
 
 class Tree(object):
-    """树类"""
+    """Binanry tree"""
 
     def __init__(self):
         self.root = Node()
