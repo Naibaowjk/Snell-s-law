@@ -15,7 +15,7 @@ finally plot them all in a figure
 
 Class: Light, Surface will have this attributes, and Math will do something to get right calculating.
 
-This picture will show the Algorithm of Snell's Law. the Core methond is lightrun()
+This picture will show the Algorithm of Snell's Law. the Core method is lightrun()
 ![Math Module View2](/Image/Theory2.jpg)
 
 as alternative, for transmisson and reflection, we have transmisson2() and reflection2(),transmisson2 works good, reflection2 maybe have bugs, not very reliable .
