@@ -69,8 +69,11 @@ Test Framework is pytest.
 in the test file we do some test to make sure the Algorithm works right, in fact, this test file building after the run file.
 
 test1 is for speicial case that don't hit.
-test2 is for vertically hits
-test3 is for total internal reflection TIR
+
+test2 is for vertically hits.
+
+test3 is for total internal reflection TIR.
+
 test4 is for a normal case,
 
 by this 4 tests we can almost make sure that the algorithm are works good, and for more complicated case we can use 
