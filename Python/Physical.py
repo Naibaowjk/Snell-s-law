@@ -284,7 +284,7 @@ class Physical:
                         tree_light.add(light_r_temp)
         return [tree_light, list_surface]
 
-    def run_plot(self, list_surface=[Surface()], light_in=Light(), i=1, size=2):
+    def run_plot(self, list_surface=[Surface()], light_in=Light(), i=1, size=2 , isshow= True):
         # i is the times to t and r, size is the large of surface
         list_tree_surface = self.lightrun(list_surface, light_in, i)
         tree_light = list_tree_surface[0]
@@ -302,8 +302,8 @@ class Physical:
             y_p = surface.get_p()[1]
             surface.plot(fig, ax, x=np.arange(-size+x_p, size+x_p,
                                               size/5), y=np.arange(-size+y_p, size+y_p, size/5))
-
-        plt.show()
+        if isshow :
+            plt.show()
 
     def get_mp_t0_and_surface(self, list_surface=[Surface()], light_temp=Light()):
         # temp list to check min

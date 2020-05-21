@@ -22,21 +22,21 @@ as alternative, for transmisson and reflection, we have transmisson2() and refle
 
 at last, we will show you some detail of this Algorithm.
 
-- Dont't have metting point :
+- **Dont't have metting point** :
 
 we get 2 eqautions to solve, if no meeting point, we consider it on first and set t0 = 0, it also has a situation that t0<0 , it means also not hit. so can only judge if t0>0.
 
 for the really hit surface, t0 must be the minimal of list_t0.
 
-- Special case: 
+- **Special case for transmisson**: 
 
-for case2 , case3, we use some if command to get transmisson light
+for  run case2 , case3, we use some if command to get transmisson light
 
-- How to judge the reflection index.
+- **How to judge the reflection index**.
 
 we can calculate surface.get_n()*light.get_v() , if >0 , then from n1 to n2, else from n2 t0 n1.
 
-- What's tree looks like in few times refecltion
+- **What's tree looks like in few times refecltion**
 
 ![Math Module View3](/Image/Theory3.jpg)
 
@@ -62,7 +62,24 @@ have 3 package installed:
 2. Matplotlib
 3. Sympy
 
-#### 2.special case test information
+Test Framework is pytest.
+
+#### 2.test file
+
+in the test file we do some test to make sure the Algorithm works right, in fact, this test file building after the run file.
+
+test1 is for speicial case that don't hit.
+test2 is for vertically hits
+test3 is for total internal reflection TIR
+test4 is for a normal case,
+
+by this 4 tests we can almost make sure that the algorithm are works good, and for more complicated case we can use 
+
+    Physical().run_plot() 
+    
+to get a figure to watch.
+
+#### 3.run file : Special cases run information
 
 - case1:
 

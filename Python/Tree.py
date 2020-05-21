@@ -104,24 +104,22 @@ class Tree(object):
         while myStack2:  # 将myStack2中的元素出栈，即为后序遍历次序
             print(myStack2.pop().elem)
 
-    def level_queue(self, root, list_elem=[]):
+    def level_queue(self, root):
         """利用队列实现树的层次遍历"""
         list_elem2=[]
         if root == None:
-            return list_elem
+            return list_elem2
         myQueue = []
         node = root
         myQueue.append(node)
         while myQueue:
             node = myQueue.pop(0)
             if node.elem != None:
-                list_elem.append((node.elem))
-            print(list_elem)
+                list_elem2.append((node.elem))
             if node.lchild != None:
                 myQueue.append(node.lchild)
             if node.rchild != None:
                 myQueue.append(node.rchild)
-            list_elem2=list_elem
         return list_elem2
 
 

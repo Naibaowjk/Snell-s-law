@@ -8,244 +8,95 @@ from Tree import *
 
 
 def test1():
-
-    fig = plt.Figure()
-    ax = plt.axes(projection='3d')
-
-    light_i = Light(np.array([-3, 5, 3]), np.array([-1, 0, -1]))
+    ''' Test 3 speicial case
+            1. When Light is parallel the surface, the Light don't hit the Surface.
+            2. When Light source is on the surface.
+            3. When no Light, it's is equal situation with parallel
+        This 3 cases will judge in Physical.get_mp_and_t0(), it will return t0=0
+    '''
+    # the light parallel to surface
+    light_i1 = Light(np.array([-3, 5, 3]), np.array([1, 0, 0]))
+    light_i2 = Light(np.array([0, 1, 0]), np.array([-1.4, 0, -1]))
+    light_i3 = Light(np.array([0, 1, 0]), np.array([0, 0, 0]))
     surface = Surface(np.array([0, 1, 0]), np.array(
         [0, 0, 1]), Surface().get_n_air(), Surface().get_n_water())
-    surface2 = Surface(np.array(
-        [0, 1, -5]), np.array([0, 0, 1]), Surface().get_n_water(), Surface().get_n_air())
     phy = Physical()
-
-    # first time
-    light_t = phy.transmisson(surface, light_i)
-    light_r = phy.reflection(surface, light_i)
-
-    ms_t0 = phy.get_mp_and_t0(surface, light_i)
-    x = float(ms_t0[0])
-    y = float(ms_t0[1])
-    z = float(ms_t0[2])
-    t0 = float(ms_t0[3])
-
-    light_i.set_t(np.arange(0, t0+t0/10, t0/10))
-
-    # second time
-    light_r2 = phy.reflection(surface2, light_t)
-    light_t2 = phy.transmisson(surface2, light_t)
-
-    ms_t1 = phy.get_mp_and_t0(surface2, light_t)
-    x2 = float(ms_t1[0])
-    y2 = float(ms_t1[1])
-    z2 = float(ms_t1[2])
-    t2 = float(ms_t1[3])
-
-    light_t.set_t(np.arange(0, t2+t2/10, t2/10))
-
-    # plot light and surface
-    surface.plot(fig, ax, np.arange(-5+x, 5+x, 0.2), np.arange(-5+y, 5+y, 0.2))
-    surface2.plot(fig, ax, np.arange(-5+x2, 5+x2, 0.2),
-                  np.arange(-5+y2, 5+y2, 0.2))
-    light_i.plot(fig, ax, 'b')
-    light_t.plot(fig, ax, 'g')
-    light_r.plot(fig, ax, 'g')
-    light_r2.plot(fig, ax, 'r')
-    light_t2.plot(fig, ax, 'r')
-
-    # plot n,n2
-    light_n = Light(np.array([x, y, z]), surface.get_n())
-    light_n.plot(fig, ax, 'y')
-
-    light_n2 = Light(np.array([x2, y2, z2]), surface2.get_n())
-    light_n2.plot(fig, ax, 'y')
-
-    plt.show()
-
-    return 0
+    ms_t0_1 = phy.get_mp_and_t0(surface, light_i1)
+    ms_t0_2 = phy.get_mp_and_t0(surface, light_i2)
+    ms_t0_3 = phy.get_mp_and_t0(surface, light_i3)
+    t1 = ms_t0_1[3]
+    t2 = ms_t0_2[3]
+    t3 = ms_t0_3[3]
+    assert (t1 == 0) & (t2 == 0) & (t3 == 0)
 
 
 def test2():
-    fig = plt.Figure()
-    ax = plt.axes(projection='3d')
-
-    light_i = Light(np.array([-3, 5, 3]), np.array([-1, 0, -1]))
-    surface = Surface(np.array([0, 1, 0]), np.array([0, 0, 1]))
-    surface2 = Surface(np.array([0, 1, -5]), np.array([0, 0, 1]))
-    list_surface = [surface, surface2]
-    phy = Physical()
-
-    # first time
-    light_t = phy.transmisson(
-        surface, light_i)
-    light_r = phy.reflection(surface, light_i)
-
-    list_ms_t0_s = phy.get_mp_t0_and_surface(list_surface, light_i)
-    ms_t0 = list_ms_t0_s[0]
-    x = float(ms_t0[0])
-    y = float(ms_t0[1])
-    z = float(ms_t0[2])
-    t0 = float(ms_t0[3])
-
-    light_i.set_t(np.arange(0, t0+t0/10, t0/10))
-
-    # second time
-    light_r2 = phy.reflection(surface2, light_t)
-    light_t2 = phy.transmisson(
-        surface2, light_t)
-
-    ms_t1 = phy.get_mp_and_t0(surface2, light_t)
-    x2 = float(ms_t1[0])
-    y2 = float(ms_t1[1])
-    z2 = float(ms_t1[2])
-    t2 = float(ms_t1[3])
-
-    light_t.set_t(np.arange(0, t2+t2/10, t2/10))
-
-    # plot light and surface
-    surface.plot(fig, ax, np.arange(-5+x, 5+x, 0.2), np.arange(-5+y, 5+y, 0.2))
-    surface2.plot(fig, ax, np.arange(-5+x2, 5+x2, 0.2),
-                  np.arange(-5+y2, 5+y2, 0.2))
-    light_i.plot(fig, ax, 'b')
-    light_t.plot(fig, ax, 'g')
-    light_r.plot(fig, ax, 'g')
-    light_r2.plot(fig, ax, 'r')
-    light_t2.plot(fig, ax, 'r')
-
-    # plot n,n2
-    light_n = Light(np.array([x, y, z]), surface.get_n())
-    light_n.plot(fig, ax, 'y')
-
-    light_n2 = Light(np.array([x2, y2, z2]), surface2.get_n())
-    light_n2.plot(fig, ax, 'y')
-
-    plt.show()
-    return 0
-
-
-def test3():
-    light_i = Light(np.array([3, 0, 3]), np.array([-1, 0, -1]))
+    ''' Test when the Light vertically hits the Surface
+        we set the hits time only by 1 and only have 1 surface
+        the light transmision light_t.v will equal with  light_i.v
+    '''
     surface = Surface(np.array([0, 1, 0]), np.array(
-        [0, 0, 1]), Surface().get_n_air(), Surface().get_n_water())
-    surface2 = Surface(np.array(
-        [0, 1, -5]), np.array([0, 0, 1]), Surface().get_n_water(), Surface().get_n_air())
-    surface3 = Surface(np.array(
-        [0, 1, -10]), np.array([0, 0, 1]), Surface().get_n_air(), Surface().get_n_air())
-    list_surface = [surface, surface2, surface3]
-    phy = Physical()
-
-    phy.run_plot(list_surface, light_i, 3, 10)
-
-# ---------------------------------------------FOR SPECIAL CASE-----------------------------
-
-# ------------------------------------------case 1: parallel surface
-
-
-def test4():
-    # light
-    light_i = Light(np.array([-3, 5, 3]), np.array([1, 0, 0]))
-    # surface
-    surface = Surface(np.array([0, 1, 0]), np.array(
-        [0, 0, 1]), Surface().get_n_air(), Surface().get_n_water())
-    list_surface = [surface]
-    # run
-    Physical().run_plot(list_surface, light_i, 1, 5)
-
-# ------------------------------------------case 2: directly
-
-
-def test5():
-    # surface
-    surface = Surface(np.array([0, 1, 0]), np.array(
-        [0, 0, 1]), Surface().get_n_air(), Surface().get_n_water())
+        [0, 0, 1]), Surface().get_n_water(), Surface().get_n_air())
     list_surface = [surface]
     # light
     light_i = Light(np.array([3, 2, 3]), np.array([0, 0, -1]))
-    # run
-    Physical().run_plot(list_surface, light_i, 1, 10)
 
-# ------------------------------------------case 3: total internal reflection TIR case
+    phy = Physical()
+
+    list_tree_surface = phy.lightrun(list_surface, light_i, 1)
+    tree_light = list_tree_surface[0]
+    list_surface = list_tree_surface[1]
+    list_light = tree_light.level_queue(tree_light.root)
+
+    assert (list_light[0].get_v() == list_light[1].get_v()).all()
 
 
-def test6():
+def test3():
+    ''' Test total internal reflection TIR case
+        when no transmission, it will be no light_t,
+        if
+            the hits times is 1
+        the light_t.get_v() is [0,0,0]
+    '''
     # surface
     surface = Surface(np.array([0, 1, 0]), np.array(
         [0, 0, 1]), Surface().get_n_water(), Surface().get_n_air())
     list_surface = [surface]
     # light
     light_i = Light(np.array([3, 2, 3]), np.array([-1.4, 0, -1]))
-    # run
-    Physical().run_plot(list_surface, light_i, 1, 10)
+    # Physical object
+    phy = Physical()
 
-# ------------------------------------------case 4: points on surface
+    list_tree_surface = phy.lightrun(list_surface, light_i, 1)
+    tree_light = list_tree_surface[0]
+    list_surface = list_tree_surface[1]
+    list_light = tree_light.level_queue(tree_light.root)
+
+    assert (list_light[1].get_v() == np.array([0, 0, 0])).all()
 
 
-def test7():
-    # surface
-    surface = Surface(np.array([0, 1, 0]), np.array(
-        [0, 0, 1]), Surface().get_n_air(), Surface().get_n_water())
+def test4():
+    ''' Normal case, one time reflection and one time transmisson , light in air through the air.
+        data : light source [-1 0 1], light vector [1 0 -1], surface is xoy,n1=1 n2=1
+        esay to hand calculate 
+               light_r.s = [0,0,0] light_r.vector = [1,0,1]
+               light_t.s = [0,0,0] lgiht_t.vector = [1,0,-1]
+    '''
+    light_i = Light(np.array([-1, 0, 1]), np.array([1, 0, -1]))
+    surface = Surface()
     list_surface = [surface]
-    # light
-    light_i = Light(np.array([0, 1, 0]), np.array([-1.4, 0, -1]))
-    # run
-    Physical().run_plot(list_surface, light_i, 1, 10)
+    phy = Physical()
 
-# ------------------------------------------case 5: no light
+    list_tree_surface = phy.lightrun(list_surface, light_i, 1)
+    tree_light = list_tree_surface[0]
+    list_surface = list_tree_surface[1]
+    list_light = tree_light.level_queue(tree_light.root)
 
+    light_r = list_light[2]
+    light_t = list_light[1]
 
-def test8():
-    surface = Surface(np.array([0, 1, 0]), np.array(
-        [0, 0, 1]), Surface().get_n_air(), Surface().get_n_water())
-    list_surface = [surface]
-    # light
-    light_i = Light(np.array([0, 1, 0]), np.array([0, 0, 0]))
-    # run
-    Physical().run_plot(list_surface, light_i, 1, 10)
-
-# ------------------------------------------case 6: special surface
-
-
-def test9():
-    surface = Surface(np.array([0, 0, 0]), np.array([1, 0, 0]))
-    fig = plt.Figure()
-    ax = plt.axes(projection='3d')
-    surface.plot(fig, ax)
-    plt.show()
-
-# ------------------------------------------case 7: almost directly
-
-def test10():
-    surface1 = Surface(np.array([0, 0, 0]), np.array(
-        [0, 0, 1]), Surface().get_n_air(), Surface().get_n_water())
-
-    list_surface = [surface1]
-
-    light_i = Light(np.array([0, 0, 1]), np.array([0.1, 0.1, -1]))
-
-    Physical().run_plot(list_surface, light_i)
-# ------------------------------------------case 8: for fun
-
-def test11():
-    surface1 = Surface(np.array([0, 0, 0]), np.array([1, 0, 0]))
-    surface2 = Surface(np.array([0, 0, 0]), np.array([0, 0, 1]))
-    surface3 = Surface(np.array([3, 0, 0]), np.array([1, 0, 0]))
-
-    list_surface = [surface1, surface2, surface3]
-
-    light_i = Light(np.array([0, 0, 1]), np.array([1, 0, -1]))
-
-    Physical().run_plot(list_surface, light_i, 3, 6)
-
-# ------------------------------------------case 9: only reflction in Metal
-def test12():
-    surface1 = Surface(np.array([0, 0, 0]), np.array(
-        [-1, 0, 0]), Surface().get_n_metal(), Surface().get_n_water())
-    surface2 = Surface(np.array([3, 0, 0]), np.array(
-        [-1, 0, 0]), Surface().get_n_water(), Surface().get_n_metal())
-
-    list_surface = [surface1, surface2]
-
-    light_i = Light(np.array([0, 0, 1]), np.array([1, 0, -1]))
-    # run
-    Physical().run_plot(list_surface, light_i, 5, 30)
-
+    b1 = (light_r.get_s() == np.array([0, 0, 0])).all()
+    b2 = (light_r.get_v() == np.array([1, 0, 1])).all()
+    b3 = (light_t.get_s() == np.array([0, 0, 0])).all()
+    b4 = (light_t.get_v() == np.array([1, 0, -1])).all()
+    assert b1 & b2 & b3 & b4
