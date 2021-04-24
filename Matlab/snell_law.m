@@ -19,7 +19,7 @@ eqn1=(x_p-p(1))*n(1)+(y_p-p(2))*n(2)+(z_p-p(3))*n(3)==0;
 %% meeting point calcular,
 % the meeting point & the time on surface
 eqn2=S'+t0*v_i'==[x_p;y_p;z_p];
-[x_p,y_p,z_p,t0]=solve([eqn1,eqn2],[x_p,y_p,z_p,t0]);
+[x_p,y_p,z_p,t0]=solve([eqn1,eqn2(1),eqn2(2),eqn2(3)],[x_p,y_p,z_p,t0]);
 p_m=double([x_p,y_p,z_p]);
 % make n vector in meeting point, cause class(n) is sym, change to double,
 % or will get error on mesh
@@ -72,7 +72,7 @@ if isequal(n/n*n',-v_i/v_i*v_i')
 else
     % n1<n2, nothing will happen
     if (n1<=n2)
-        % get sin£¨theta1),sin(theta2),cos(theta1),cos(theta2)
+        % get sinÂ£Â¨theta1),sin(theta2),cos(theta1),cos(theta2)
         cos1=(-v_i)*n'/sqrt(v_i*v_i'*n*n');
         sin1=sqrt(1-cos1^2);
         sin2=n1*sin1/n2;
